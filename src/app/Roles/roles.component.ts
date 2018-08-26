@@ -13,7 +13,6 @@ export class RolesComponent implements OnInit, Roles {
    }
 
   ngOnInit() {
-    
   }
 private SetupRoles() {
 let UserRoles: RoleData[];

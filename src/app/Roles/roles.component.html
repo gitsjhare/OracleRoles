@@ -1,3 +1,26 @@
-<p>
-  roles works!
-</p>
+<div class="row ComponentBody">
+  <div class="col-2">
+    User Name
+  </div>
+  <div class="col-2">
+    <input type="text" [(ngModel)]="UserName" placeholder="User Name" autocomplete="false">
+  </div>
+  <div class="w-100"></div>
+  <div class="col-2">Roles</div>
+  <div class="col-10">
+    <div class="row">
+      <div class="col">
+        <input type="checkbox" [(ngModel)]="Roles[0].UserRolesVal">
+        <label>{{Roles[0].UserRole}}</label>
+      </div>
+      <div class="col">
+        <input type="checkbox" [(ngModel)]="Roles[1].UserRolesVal">
+        <label>{{Roles[1].UserRole}}</label>
+      </div>
+      <div class="col">
+        <input type="checkbox" [(ngModel)]="Roles[2].UserRolesVal">
+        <label>{{Roles[2].UserRole}}</label>
+      </div>
+    </div>
+  </div>
+</div>

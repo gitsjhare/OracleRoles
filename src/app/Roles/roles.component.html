@@ -1,4 +1,8 @@
-<div class="row ComponentBody">
+<div class="card margintop_20">
+    <div class="card-header">
+      User Detail
+    </div>
+<div class="row ComponentBody margintop_10">
   <div class="col-2">
     User Name
   </div>
@@ -6,9 +10,9 @@
     <input type="text" [(ngModel)]="UserName" placeholder="User Name" autocomplete="false">
   </div>
   <div class="w-100"></div>
-  <div class="col-2">Roles</div>
+  <div class="col-2 margintop_10">Roles</div>
   <div class="col-10">
-    <div class="row">
+    <div class="row margintop_10">
       <div class="col">
         <input type="checkbox" [(ngModel)]="Roles[0].UserRolesVal">
         <label>{{Roles[0].UserRole}}</label>
@@ -22,5 +26,35 @@
         <label>{{Roles[2].UserRole}}</label>
       </div>
     </div>
+  </div>
+  <div class="col-12 text-right margintop_10">
+    <input type="button" value="Submit" (click)="UpdateRoles()"/>
+  </div>
+</div>
+</div>
+
+<div class="margintop_20 table-responsive">
+  <div class="card">
+    <div class="card-header">
+      Grid Data
+    </div>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col-1">#</th>
+          <th scope="col-3">User Name</th>
+          <th scope="col-8">Role(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let GridRow of UserRoleGrid">
+          <th scope="row">Edit</th>
+          <td> {{GridRow.UserName}}</td>
+          <td><span *ngFor="let UserRoles of GridRow.Roles;let i = index">
+              {{UserRoles.UserRole}}<span *ngIf="GridRow.Roles.length>(i+1)">,</span>
+            </span></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

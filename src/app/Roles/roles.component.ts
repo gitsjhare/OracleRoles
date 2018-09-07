@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChange } from '@angular/core';
  import {RoleServiceService} from '../Service/role-service.service';
+
 
 @Component({
   selector: 'app-roles',
@@ -8,17 +9,22 @@ import { Component, OnInit } from '@angular/core';
    providers: [RoleServiceService]
 })
 export class RolesComponent implements OnInit, Roles {
+  OracleRoles: string;
+  GetMethod: string;
   UserRoleGrid: Roles[];
   Roles: RoleData[];
   UserName: string;
   AddNewRole: Roles[];
-
   constructor(private roleservice: RoleServiceService) {
     this.Roles = this.SetupRoles();
   }
 
   ngOnInit() {
-    this.roleservice.GetUserRoles().subscribe((result) => {
+/*this.roleservice.GetAPInMethod().subscribe((result) => {
+  this.apiPath = result; console.log(result);
+});*/
+
+  this.roleservice.GetUserRoles().subscribe((result) => {
       this.UserRoleGrid = result;
      }, (error) => {alert('API is not Working!'); });
   }

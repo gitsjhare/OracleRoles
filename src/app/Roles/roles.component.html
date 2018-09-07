@@ -43,7 +43,8 @@
         <tr>
           <th scope="col-1">#</th>
           <th scope="col-3">User Name</th>
-          <th scope="col-8">Role(s)</th>
+          <th scope="col-6">Role(s)</th>
+          <th scope="col-2">Updated On</th>
         </tr>
       </thead>
       <tbody>
@@ -53,6 +54,7 @@
           <td><span *ngFor="let UserRoles of GridRow.Roles;let i = index">
               {{UserRoles.UserRole}}<span *ngIf="GridRow.Roles.length>(i+1)">,</span>
             </span></td>
+            <td>{{GridRow.Updated_On}}</td>
         </tr>
       </tbody>
     </table>

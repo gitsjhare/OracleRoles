@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+ import {RoleServiceService} from '../Service/role-service.service';
 
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.scss']
+  styleUrls: ['./roles.component.scss'],
+   providers: [RoleServiceService]
 })
 export class RolesComponent implements OnInit, Roles {
   UserRoleGrid: Roles[];
@@ -11,12 +13,14 @@ export class RolesComponent implements OnInit, Roles {
   UserName: string;
   AddNewRole: Roles[];
 
-  constructor() {
+  constructor(private roleservice: RoleServiceService) {
     this.Roles = this.SetupRoles();
   }
 
   ngOnInit() {
-    this.GetUserforGrid();
+    this.roleservice.GetUserRoles().subscribe((result) => {
+      this.UserRoleGrid = result;
+     }, (error) => {alert('API is not Working!'); });
   }
   private SetupRoles() {
     let UserRoles: RoleData[];

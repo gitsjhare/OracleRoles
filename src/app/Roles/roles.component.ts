@@ -83,7 +83,7 @@ export class RolesComponent implements OnInit, Roles {
     this.Roles = this.SetupRoles();
   }
 
-  public PreventSpacialChar(input) {
+  public PreventNumber(input) {
     const e = <KeyboardEvent> input;
     const RegExp = /^[0-9]*$/;
     if (e.key.match(RegExp)) {

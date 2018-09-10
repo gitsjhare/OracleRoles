@@ -1,92 +1,93 @@
-import { Component, OnInit, OnChanges, SimpleChange } from '@angular/core';
- import {RoleServiceService} from '../Service/role-service.service';
+import { Component, OnInit } from '@angular/core';
+import {FormControl} from '@angular/forms';
+import { RoleServiceService } from '../Service/role-service.service';
 
 
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
   styleUrls: ['./roles.component.scss'],
-   providers: [RoleServiceService]
+  providers: [RoleServiceService]
 })
 export class RolesComponent implements OnInit, Roles {
-  OracleRoles: string;
-  GetMethod: string;
   UserRoleGrid: Roles[];
+  UserRole: OracleCreateuser[];
   Roles: RoleData[];
   UserName: string;
-  AddNewRole: Roles[];
+  AddNewRole: Roles;
+  oracleRoleUpdate: OracleRoleUpdate[];
+  formControl: any;
+
   constructor(private roleservice: RoleServiceService) {
     this.Roles = this.SetupRoles();
+    this.formControl = new FormControl();
   }
 
   ngOnInit() {
-/*this.roleservice.GetAPInMethod().subscribe((result) => {
-  this.apiPath = result; console.log(result);
-});*/
-
-  this.roleservice.GetUserRoles().subscribe((result) => {
-      this.UserRoleGrid = result;
-     }, (error) => {alert('API is not Working!'); });
+    this.LoadGridData();
   }
+
   private SetupRoles() {
     let UserRoles: RoleData[];
     UserRoles = [
-      { UserRole: 'Supervisor Role', UserRolesVal: false },
-      { UserRole: 'Scheduling Operator', UserRolesVal: false },
-      { UserRole: 'Test Center Operator', UserRolesVal: false }
+      { RoleName: 'Supervisor Role', RoleValue: false },
+      { RoleName: 'Scheduling Operator', RoleValue: false },
+      { RoleName: 'Test Center Operator', RoleValue: false }
     ];
+    this.oracleRoleUpdate = new Array();
+    this.oracleRoleUpdate = [
+      { RoleName: 'Supervisor Role', OracleRoleName: 'SupervisorRole', RoleValue: 'true' },
+      { RoleName: 'Scheduling Operator', OracleRoleName: 'SchedulingOperator', RoleValue: 'true' },
+      { RoleName: 'Test Center Operator', OracleRoleName: 'TestCenterOperator', RoleValue: 'true' }];
     return UserRoles;
   }
-  private GetUserforGrid() {
-    this.UserRoleGrid = [
-      {
-        UserName: 'First User',
-        Roles:
-          [
-            { UserRole: 'Supervisor Role', UserRolesVal: true },
-            { UserRole: 'Scheduling Role', UserRolesVal: false },
-            { UserRole: 'Test Center Operator', UserRolesVal: true }
-          ]
-      },
-      {
-        UserName: 'Second User',
-        Roles:
-          [
-            { UserRole: 'Supervisor Role', UserRolesVal: true },
-            { UserRole: 'Test Center Operator', UserRolesVal: true }
-          ]
-      },
-      {
-        UserName: 'Third User',
-        Roles:
-          [
-            { UserRole: 'Supervisor Role', UserRolesVal: true },
-          ]
-      },
-      {
-        UserName: 'Fourth User',
-        Roles:
-          [
-            { UserRole: 'Scheduling Role', UserRolesVal: false },
-            { UserRole: 'Test Center Operator', UserRolesVal: true }
-          ]
-      }
-    ];
-  }
   public UpdateRoles() {
-   const SRolesArray: RoleData[] = new Array();
+    const SRolesArray: OracleCreateuser[] = new Array();
     if (this.UserName !== undefined && this.UserName !== '') {
-      this.Roles.forEach(function (value) {
-        if (value.UserRolesVal === true) {
-          SRolesArray.push({UserRole: value.UserRole, UserRolesVal: value.UserRolesVal});
-        }
+      this.Roles.forEach((value) => {
+          const SelectedRole = this.oracleRoleUpdate.find(item => item.RoleName === value.RoleName);
+          SRolesArray.push({ RoleName: SelectedRole.OracleRoleName, RoleValue: (value.RoleValue) ? 'true' : 'false' });
       });
-      console.log(SRolesArray);
-      this.AddNewRole = [{
+      this.AddNewRole = {
         UserName: this.UserName,
-        Roles: SRolesArray
-      }];
-      this.UserRoleGrid.push(this.AddNewRole[0]);
+        UserRole: SRolesArray
+      };
+      this.roleservice.UpdateUserRoles(this.AddNewRole).subscribe((response) => {
+        this.ResetForm();
+        this.LoadGridData();
+      }, (error) => {
+        alert(error.statusText);
+      });
+    }
+  }
+  public DeleteRole(UserName) {
+    if (confirm('Are you sure to delete!')) {
+      const Result = this.roleservice.DeleteUser(UserName).subscribe((response) => {
+        this.LoadGridData();
+      },
+        (error) => {
+          alert(error.error.Message);
+        }
+      );
+    }
+
+  }
+
+  private LoadGridData() {
+    this.roleservice.GetUserRoles().subscribe((result) => {
+      this.UserRoleGrid = result;
+    }, (error) => { alert('API is not Working!'); });
+  }
+  private ResetForm() {
+    this.UserName = '';
+    this.Roles = this.SetupRoles();
+  }
+
+  public PreventSpacialChar(input) {
+    const e = <KeyboardEvent> input;
+    const RegExp = /^[0-9]*$/;
+    if (e.key.match(RegExp)) {
+      e.preventDefault();
     }
   }
 }

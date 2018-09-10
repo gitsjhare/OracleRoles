@@ -1,39 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {Http} from '@angular/http';
-import {map} from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RoleServiceService {
-  private PermissionAPI: string;
-  public APIRoles: any;
-  private APIPath: APIPath;
-    constructor(private http: HttpClient, private httpp: Http) {
-    this.PermissionAPI = 'http://svc.goamp.com/UserPermissions';
-    // this.PermissionAPI = 'http://localhost:54961';
-    this.GetAPInMethod();
-    // console.log(this.APIRoles);
-   // console.log(this.APIRoles);
-  }
+    private PermissionAPI: string;
+    constructor(private http: HttpClient) {
+        this.PermissionAPI = 'https://testsvc.goamp.com/UserPermissions';
+    }
 
-  public GetUserRoles(): Observable<Roles[]> {
-    // this.PermissionAPI += '/api/values';
-    this.PermissionAPI += '/GetUser';
-    return this.http.get<Roles[]>(this.PermissionAPI);
-  }
-
-  public GetAPInMethod() {
-   return this.http.get<APIPath>('assets/APILink.json').subscribe((response) => {
-    console.log(response[0].OracleRoles);       // Printing the Value on Console
-
-   this.APIPath.OracleRoles = response[0].OracleRoles;    // Making Error onward
-   this.APIPath.GetMethod = response[0].GetMethod.toString();
-  console.log(this.APIPath);
-   });
-  }
-
-
+    public GetUserRoles(): Observable<Roles[]> {
+        const GetCall = this.PermissionAPI + '/GetUser';
+        return this.http.get<Roles[]>(GetCall);
+    }
+    public UpdateUserRoles(AddNewRole: Roles): Observable<Roles> {
+        const PostCall = this.PermissionAPI + '/CreateUser';
+        return this.http.post<Roles>(PostCall, AddNewRole);
+    }
+    public DeleteUser(username: string): Observable<any> {
+        const DeleteCall = this.PermissionAPI + '/Delete/' + username;
+        return this.http.delete(DeleteCall);
+    }
 }

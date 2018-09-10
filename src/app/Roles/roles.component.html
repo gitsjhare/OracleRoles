@@ -7,23 +7,23 @@
     User Name
   </div>
   <div class="col-2 marginleft_10m">
-    <input type="text" [(ngModel)]="UserName" placeholder="User Name" autocomplete="false">
+    <input #txtUserName type="text" [(ngModel)]="UserName" placeholder="User Name" class="form-control" autocomplete="false" ng-pattern="/^[a-zA-Z]*$/" (keydown)="PreventSpacialChar($event)" >
   </div>
   <div class="w-100"></div>
   <div class="col-3 margintop_10">Roles</div>
   <div class="col-9 marginleft_10m">
     <div class="row margintop_10">
       <div class="col">
-        <input type="checkbox" [(ngModel)]="Roles[0].UserRolesVal">
-        <label>{{Roles[0].UserRole}}</label>
+        <input type="checkbox" [(ngModel)]="Roles[0].RoleValue">
+        <label>{{Roles[0].RoleName}}</label>
       </div>
       <div class="col">
-        <input type="checkbox" [(ngModel)]="Roles[1].UserRolesVal">
-        <label>{{Roles[1].UserRole}}</label>
+        <input type="checkbox" [(ngModel)]="Roles[1].RoleValue">
+        <label>{{Roles[1].RoleName}}</label>
       </div>
       <div class="col">
-        <input type="checkbox" [(ngModel)]="Roles[2].UserRolesVal">
-        <label>{{Roles[2].UserRole}}</label>
+        <input type="checkbox" [(ngModel)]="Roles[2].RoleValue">
+        <label>{{Roles[2].RoleName}}</label>
       </div>
     </div>
   </div>
@@ -32,6 +32,7 @@
   </div>
 </div>
 </div>
+
 
 <div class="margintop_20 table-responsive">
   <div class="card">
@@ -49,10 +50,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let GridRow of UserRoleGrid">
-          <th scope="row">Edit</th>
+          <td scope="row" style="cursor: default; text-decoration: none;"><a href="#" (click)="DeleteRole(GridRow.UserName)">Delete</a></td>
           <td> {{GridRow.UserName}}</td>
-          <td><span *ngFor="let UserRoles of GridRow.Roles;let i = index">
-              {{UserRoles.UserRole}}<span *ngIf="GridRow.Roles.length>(i+1)">,</span>
+          <td><span *ngFor="let UserRoles of GridRow.UserRole;let i = index">
+              {{UserRoles.RoleName}}<span *ngIf="GridRow.UserRole.length>(i+1)">,</span>
             </span></td>
             <td>{{GridRow.Updated_On}}</td>
         </tr>

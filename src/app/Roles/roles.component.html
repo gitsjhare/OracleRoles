@@ -7,7 +7,7 @@
     User Name
   </div>
   <div class="col-2 marginleft_10m">
-    <input #txtUserName type="text" [(ngModel)]="UserName" placeholder="User Name" class="form-control" autocomplete="false" ng-pattern="/^[a-zA-Z]*$/" (keydown)="PreventSpacialChar($event)" >
+    <input #txtUserName type="text" [(ngModel)]="UserName" placeholder="User Name" class="form-control" autocomplete="false" (keydown)="PreventSpacialChar($event)" >
   </div>
   <div class="w-100"></div>
   <div class="col-3 margintop_10">Roles</div>
